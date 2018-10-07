@@ -1,9 +1,11 @@
 <div class = "container">
 
     <% for(i=0; i< tickets.length; i++) { %>
+        
         <div class = "card">
             <div class = "card-body">
-                <%= tickets[i].subject %>
+                
+                <h4><span class = "badge badge-primary"> <%= tickets[i].status %></span><%= tickets[i].subject %></h4>
             </div>
         </div>
     <% } %>
