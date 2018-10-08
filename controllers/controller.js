@@ -1,19 +1,16 @@
 const axios = require('axios');
-const credentials = require('../models/credentials');
+const credentials = require('../models/credentials').credentials;
 
 const ticketsPerPage = 25;
 
 let fetchTickets = function (req, res) {
     
     let page = req.query.page || 1;
-    axios.get("https://anthonymiller.zendesk.com/api/v2/tickets.json?page=" + page + "&per_page=" + ticketsPerPage,
-        {
-            auth: {
-                username: credentials.email,
-                password: credentials.password
-            }
-
-        }).then(response => {
+    
+    axios.get(`https://anthonymiller.zendesk.com/api/v2/tickets.json?page=${page}&per_page=${ticketsPerPage}`,
+        {headers : { Authorization: `Basic ${credentials}`}}
+    )
+    .then(response => {
 
             let tickets = response.data.tickets;
             let total_tickets = response.data.count;
@@ -22,15 +19,16 @@ let fetchTickets = function (req, res) {
             let pages = Math.ceil(total_tickets/ticketsPerPage);
 
             if (page > pages){
-                res.redirect("tickets/?page=" + pages);
+                res.redirect(`tickets/?page=${pages}`);
             } else if (page < 1){
                 res.redirect("tickets/?page=1")
             }
-            console.log(response);
+            console.log(response.data);
             res.render('index.ejs', { 
                 tickets: tickets,
                 total_tickets : total_tickets,
-                pages : pages 
+                pages : pages,
+                page : page
             });
 
         }).catch(error => {
@@ -42,28 +40,54 @@ let fetchTickets = function (req, res) {
         });
 }
 
-// let fetchTicketById = function(req, res){
-//     let ticketId = req.params.id;
+let fetchTicketById = function(req, res){
+    let ticketId = req.params.id;
 
-//     axios.get("https://anthonymiller.zendesk.com/api/v2/tickets/" + ticketId + ".json",
-//     {
-//         auth: {
-//             username: credentials.email,
-//             password: credentials.password
-//         }
+    axios.get("https://anthonymiller.zendesk.com/api/v2/tickets/${ticketId}.json",
+    {headers : { Authorization: `Basic ${credentials}`}})
+    .then(response => {
 
-//     }).then(response => {
+        let ticket = response.data.ticket;
 
-//         let ticket = response.data.ticket;
+        let peopleInvolved = {
+            requester : ticket.requester_id,
+            assignee : ticket.assignee_id,
+        };
+        return peopleInvolved;
+    }).then(peopleInvolved => {
 
-//         let peopleInvolved = {
-//             requester : ticket.requester_id,
-//             assignee : ticket.assignee_id,
-//         };
-//         return peopleInvolved;
-//     }).catch(err => {
+        let requester = peopleInvolved.requester;
+        let assignee = peopleInvolved.assignee;
+        let org = peopleInvolved.submitter_id;
 
-//     });
-// } 
+        return axios.all([
+            axios.get(`https://anthonymiller.zendesk.com/api/v2/users/${requester}.json`,
+            {headers : { Authorization: `Basic ${credentials}`}}),
+            axios.get(`https://anthonymiller.zendesk.com/api/v2/users/${assignee}.json`,
+            {headers : { Authorization: `Basic ${credentials}`}}),
+            axios.get(`https://anthonymiller.zendesk.com/api/v2/organization_fields/${org}.json`,
+            {headers : { Authorization: `Basic ${credentials}`}})
+          ]);
+          
+    }).then(axios.spread((requester, assignee, org) => {
+            
+        requester = requester.user;
+        asssignee = assignee.user;
+        org = org.organization_fields[0];
+
+        console.log(requester);
+
+        res.render('ticketInfo.ejs', {
+                    requester : requester,
+                    assignee : assignee,
+                    org : org
+                });
+      }))
+    .catch(err => {
+        res.render('index.ejs', { error: message });
+        console.log("BBBBBBBBBBBBBAAAAAAAAAAAAADDDDDDDDDDDDD");
+    });
+} 
 
 module.exports.allTickets = fetchTickets;
+module.exports.getTicket = fetchTicketById;
