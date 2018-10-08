@@ -2,7 +2,11 @@
     <div class = "jumbotron jumbotron-fluid">
         <div class = "container">
             <h1>Welcome to Mobile Ticket Viewer</h1>
-            <h3><%= tickets.length %> total tickets</h3>
+            <% if (typeof tickets != 'undefined') { %>
+                <h3><%= total_tickets %> total tickets</h3>
+            <% } else { %>
+                <h3> Something went wrong! </h3>
+            <% } %> 
         </div>
     </div>
 </header>

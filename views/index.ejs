@@ -11,7 +11,11 @@
 <body>
     <div class = "container-fluid">
         <% include ./partials/header.ejs %>
+        <% if (typeof error != 'undefined') { %>
+        <% include ./partials/errors.ejs %>
+        <% } else { %>
         <% include ./partials/tickets.ejs %>
+        <% } %>
     </div>
 </body>
 <% include ./partials/scripts.ejs %>

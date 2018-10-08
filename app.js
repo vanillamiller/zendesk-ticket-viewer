@@ -9,7 +9,7 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')))
 
 const router = require("./routes/router");
-app.use('/', router)
+app.use('/', router);
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => {
