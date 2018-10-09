@@ -1,7 +1,7 @@
-.back-button {
-    color: white;
-};
+#ticket-submit-info {
+    padding-top : 10px;
+}
 
-.container {
-    background-color: black;
+.subject {
+    padding-left: 10px;
 }

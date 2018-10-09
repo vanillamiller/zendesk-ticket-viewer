@@ -1,18 +1,29 @@
 <header>
-    <div class = "jumbotron jumbotron-fluid">
-        <div class = "container">
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container header">
             <h1>Zendesk Mobile Ticket Viewer</h1>
             <hr class="my-4">
             <% if (typeof tickets != 'undefined') { %>
-                <h3><%= first %> - <%= last %> of <%= totalTickets %> tickets</h3>
+            <div id="subheading">
+                <h3>
+                    <%= first %> -
+                    <%= last %> of
+                    <%= totalTickets %> tickets</h3>
+            </div>
             <% } else if (typeof ticket != 'undefined') { %>
 
-                <h3><% include ./status-subject.ejs %></h3>
-                <h6 class = >Requested by <%= requester.name%></h6>
+            <h3>
+                <% include ./status-subject.ejs %>
+            </h3>
+            <div id="ticket-submit-info">
+                <h6> <%= ticket.time %> &#8226 Requested by <%= requester.name%> &#8226 <span><%= requester.email%></span></h6>
+                
+                
+            </div>
 
             <% } else { %>
 
-                <h3> Something went wrong! </h3>
+            <h3> Something went wrong! </h3>
 
             <% } %>
         </div>

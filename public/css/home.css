@@ -1,0 +1,16 @@
+.card {
+    margin-bottom: 50px;
+}
+
+.card-body {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    color: black;
+  }
+
+
+
+.subject {
+    padding-left: 10px;
+}
