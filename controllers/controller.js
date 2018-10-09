@@ -1,93 +1,68 @@
-const axios = require('axios');
-const credentials = require('../models/credentials').credentials;
-
+const zendesk = require('../models/client').zendeskClient;
 const ticketsPerPage = 25;
+const axios = require("axios");
 
 let fetchTickets = function (req, res) {
-    
-    let page = req.query.page || 1;
-    
-    axios.get(`https://anthonymiller.zendesk.com/api/v2/tickets.json?page=${page}&per_page=${ticketsPerPage}`,
-        {headers : { Authorization: `Basic ${credentials}`}}
-    )
-    .then(response => {
 
+    let page = req.query.page || 1;
+
+    zendesk.get(`tickets.json?page=${page}&per_page=${ticketsPerPage}`)
+        .then(response => {
+            console.log(response);
             let tickets = response.data.tickets;
-            let total_tickets = response.data.count;
+            let totalTickets = response.data.count;
             let hasPrevPage = Boolean(response.data.previous_page);
             let hasNextPage = Boolean(response.data.next_page);
-            let pages = Math.ceil(total_tickets/ticketsPerPage);
+            let pages = Math.ceil(totalTickets / ticketsPerPage);
+            let lastOnPage =  (page-1) * ticketsPerPage + tickets.length;
+            let firstOnPage = (page-1) * ticketsPerPage + 1;
 
-            if (page > pages){
+            if (page > pages) {
                 res.redirect(`tickets/?page=${pages}`);
-            } else if (page < 1){
+            } else if (page < 1) {
                 res.redirect("tickets/?page=1")
             }
-            console.log(response.data);
-            res.render('index.ejs', { 
+
+            res.render('index.ejs', {
                 tickets: tickets,
-                total_tickets : total_tickets,
-                pages : pages,
-                page : page
+                totalTickets: totalTickets,
+                pages: pages,
+                page: page,
+                first : firstOnPage,
+                last : lastOnPage
             });
 
         }).catch(error => {
-            
+
             let message = error.response.data.error;
-            //console.log(error.response.data);
             res.render('index.ejs', { error: message });
 
         });
 }
 
-let fetchTicketById = function(req, res){
+let fetchTicketById = function (req, res) {
+    
     let ticketId = req.params.id;
 
-    axios.get("https://anthonymiller.zendesk.com/api/v2/tickets/${ticketId}.json",
-    {headers : { Authorization: `Basic ${credentials}`}})
+    zendesk.get(`tickets/${ticketId}.json`)
     .then(response => {
 
         let ticket = response.data.ticket;
-
-        let peopleInvolved = {
-            requester : ticket.requester_id,
-            assignee : ticket.assignee_id,
-        };
-        return peopleInvolved;
-    }).then(peopleInvolved => {
-
-        let requester = peopleInvolved.requester;
-        let assignee = peopleInvolved.assignee;
-        let org = peopleInvolved.submitter_id;
+        let requester = ticket.requester_id;
 
         return axios.all([
-            axios.get(`https://anthonymiller.zendesk.com/api/v2/users/${requester}.json`,
-            {headers : { Authorization: `Basic ${credentials}`}}),
-            axios.get(`https://anthonymiller.zendesk.com/api/v2/users/${assignee}.json`,
-            {headers : { Authorization: `Basic ${credentials}`}}),
-            axios.get(`https://anthonymiller.zendesk.com/api/v2/organization_fields/${org}.json`,
-            {headers : { Authorization: `Basic ${credentials}`}})
-          ]);
-          
-    }).then(axios.spread((requester, assignee, org) => {
-            
-        requester = requester.user;
-        asssignee = assignee.user;
-        org = org.organization_fields[0];
-
-        console.log(requester);
-
-        res.render('ticketInfo.ejs', {
-                    requester : requester,
-                    assignee : assignee,
-                    org : org
-                });
-      }))
-    .catch(err => {
-        res.render('index.ejs', { error: message });
-        console.log("BBBBBBBBBBBBBAAAAAAAAAAAAADDDDDDDDDDDDD");
-    });
-} 
+            zendesk.get(`users/${requester}.json`),
+            ticket
+        ])
+    })
+    .then(axios.spread((requester, ticket) => {
+        res.render("ticketInfo.ejs", {
+            ticket : ticket,
+            requester: requester
+        });
+    }))
+    .catch(err => {console.log(err.data);})
+}
 
 module.exports.allTickets = fetchTickets;
 module.exports.getTicket = fetchTicketById;

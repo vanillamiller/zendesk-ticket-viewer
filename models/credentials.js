@@ -1,13 +1,8 @@
-var zendesk = require('node-zendesk');
+const axios = require('axios');
 
-// let client = zendesk.createClient({
-//     username:  'agmiller794@gmail.com',
-//     token:     '4MM7gOVhYqNl6HZxurm8ohrSYP3R8WnwfzuA1Pv',
-//     remoteUri: 'https://anthonymiller.zendesk.com/api/v2',
-//     oauth: false
-//   });
 
-  
-
-module.exports.credentials = Buffer.from("agmiller794@gmail.com/token:4MM7gOVhYqNl6HZxurm8ohrSYP3R8WxnwfzuA1Pv")
+let credentials = Buffer.from("agmiller794@gmail.com/token:ADDgrIti7uijJFU7bWQrxKoCDGyjxVLfq6kRpNHe")
         .toString('base64');
+
+module.exports.header = { Authorization: `Basic ${credentials}`};
+        

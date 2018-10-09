@@ -6,7 +6,7 @@ router.get('/', function(req, res){
     res.redirect('/tickets')
 });
 
-router.get('/tickets', controller.allTickets);
+router.get("/tickets", controller.allTickets);
 
 router.get("/tickets/:id", controller.getTicket);
 
