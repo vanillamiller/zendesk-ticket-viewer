@@ -12,11 +12,7 @@ zendesk.get("tickets/100.json").then(res =>{
     res
     
 ])}).then(axios.spread((req, ass, org, res) => {
-    console.log(res.data)
-    // console.log(req.data);
-    // console.log(ass.data);
-    // console.log(org.data);
-    
+    console.log(res.data.created_at.getTime())
     
 })).catch(err => {
     console.log(err.data);

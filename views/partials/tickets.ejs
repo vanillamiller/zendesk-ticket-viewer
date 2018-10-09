@@ -2,27 +2,45 @@
     <div class="justify-right">
         <nav aria-label="Page navigation example">
             <ul class="pagination">
-                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                <% if(page != 1) { %>
+                <li class="page-item"><a class="page-link" href="/tickets?page=<%= page-1 %>">Previous</a></li>
+                <% } else {%>
+                <li class="page-item disabled"><a class="page-link">Previous</a></li>
+                <% } %>
+
                 <% for (i=1; i <= pages ; i++) { %>
-                <li class="page-item"><a class="page-link" href="/tickets?page=<%=i%>">
+                <%if (i == page) { %>
+                <li class="active"><a class="page-link" href="/tickets?page=<%=i%>">
+                        <%= i %></a></li>
+                <% } else { %>
+                    <li class="page-item"><a class="page-link" href="/tickets?page=<%=i%>">
                         <%= i %></a></li>
                 <% } %>
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                <% } %>
+                <% if(page != pages) { %>
+                <li class="page-item"><a class="page-link" href="/tickets?page=<%= page+1 %>">Next</a></li>
+                <% } else {%>
+                <li class="page-item disabled"><a class="page-link">next</a></li>
+                <% } %>
+
             </ul>
         </nav>
     </div>
 
-    
-        <% for(i=0; i < tickets.length; i++) { %>
-            <a href = "tickets/<%=tickets[i].id%>">
-                <div class="card">
-                    <div class="card-body">
-                            <%= tickets[i].subject %>
-                    </div>
-                </div>
-            </a>
-        <% } %>
-    
+
+    <% tickets.forEach(ticket => { %>
+    <a href="tickets/<%=ticket.id%>">
+        <div class="card">
+            <div class="card-body">
+                <p>
+                    <% include ./status-subject.ejs %>
+                    <%= ticket.subject %>
+                </p>
+            </div>
+        </div>
+    </a>
+    <% }) %>
+
 
     <!-- <table class="table">
         <thead>
