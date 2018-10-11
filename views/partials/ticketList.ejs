@@ -1,0 +1,61 @@
+<div class="container">
+
+    <div class=" float-left">
+        <% include ./pagination.ejs %>
+    </div>
+    <div class="table-responsive">
+        <table id="ticketList" class="table">
+            <thead>
+                <tr>
+                    <th class="col-xs-1">Type</th>
+                    <th class="col-xs-6">Subject</th>
+                    <th class="col-xs-2">Requester#</th>
+                    <th class="col-xs-2">Reqested</th>
+                    <th class="col-xs-1">Priority</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% tickets.forEach(ticket => { %>
+
+                <tr class="table-row" data-href="tickets/<%=ticket.id%>">
+                    <td width="10%">
+                        <% if(ticket.type){ %>
+                        <%= ticket.type %>
+                        <%} else { %>
+                        ticket
+                        <% } %>
+                    </td>
+
+                    <td width="40%">
+
+                        <%include ./status-subject.ejs%>
+
+                    <td width="20%">
+                        <%= ticket.requester_id %>
+                    </td>
+                    <td width="20%">
+                        <%= ticket.time %>
+                    </td>
+                    <td width="10%">
+                        <% if(ticket.priority){ %>
+                        <%= ticket.priority %>
+                        <%} else { %>
+                        -
+                        <% } %>
+
+                    </td>
+
+                </tr>
+
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+    <div id="paginatinon-bottom" class="float-right">
+        <% include ./pagination.ejs %>
+    </div>
+
+
+
+
+</div>

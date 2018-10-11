@@ -1,20 +1,25 @@
 <header>
     <div class="jumbotron jumbotron-fluid">
         <div class="container header">
-            <h1>Zendesk Mobile Ticket Viewer</h1>
+            <h1>Minimal Zendesk ticket viewer</h1>
             <hr class="my-4">
+            <!-- rendering ticketS -->
             <% if (typeof tickets != 'undefined') { %>
+                <!-- current tickets on page and total tickets -->
             <div id="subheading">
                 <h3>
                     <%= first %> -
                     <%= last %> of
                     <%= totalTickets %> tickets</h3>
             </div>
+            <!-- rendering single ticket -->
             <% } else if (typeof ticket != 'undefined') { %>
 
             <h3>
+                <!-- ticket status and subject -->
                 <% include ./status-subject.ejs %>
             </h3>
+            <!-- render requester, time and email -->
             <div id="ticket-submit-info">
                 <h6> <%= ticket.time %> &#8226 Requested by <%= requester.name%> &#8226 <span><%= requester.email%></span></h6>
                 
@@ -22,7 +27,7 @@
             </div>
 
             <% } else { %>
-
+                <!-- if there was an error  -->
             <h3> Something went wrong! </h3>
 
             <% } %>

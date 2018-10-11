@@ -1,16 +1,28 @@
-.card {
-    margin-bottom: 50px;
-}
-
-.card-body {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    color: black;
-  }
-
-
-
 .subject {
     padding-left: 10px;
+    display : inline-block;
+    position : absolute;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.table-row{
+    cursor:pointer;
+}
+
+#paginatinon-bottom {
+    margin-bottom : 25px;
+}
+
+ .table tbody td {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+  }
+
+#pagination-wrap {
+    padding-bottom : 20px;
+    padding-top : 20px;
 }

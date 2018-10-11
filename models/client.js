@@ -1,7 +1,8 @@
-let axios = require("axios");
-let header = require("./credentials").header;
-let subdomain = require("./credentials").subdomain;
+const axios = require("axios");
+const header = require("./credentials").header;
+const subdomain = require("./credentials").subdomain;
 
+// Create axios client with appropriate
 let zendeskClient = axios.create({
     baseURL : `https://${subdomain}.zendesk.com/api/v2/`,
     headers : header

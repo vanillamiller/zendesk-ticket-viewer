@@ -12,4 +12,3 @@ let basicAuthCredentials = Buffer.from(tokenString)
 
 module.exports = { subdomain : subdomain,
         header : { Authorization: `Basic ${basicAuthCredentials}`}};
-        
