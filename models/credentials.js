@@ -1,7 +1,7 @@
 
-let email = "agmiller794@gmail.com"
+let email = "EMAIL"
 
-let authToken = "ADDgrIti7uijJFU7bWQrxKoCDGyjxVLfq6kRpNHe";
+let authToken = "TOKEN";
 
 let tokenString = `${email}/token:${authToken}`;
 
