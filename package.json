@@ -10,7 +10,7 @@
   "author": "Anthony Miller",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "dateformat": "^3.0.3",
     "ejs": "^2.6.1",
     "express": "^4.16.3"
